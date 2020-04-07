@@ -1,0 +1,24 @@
+{
+  "name": "arqui2practica2",
+  "version": "1.0.0",
+  "description": "Guante inteligente",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegog56/Practica2Arqui2.git"
+  },
+  "author": "Diego Gomez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diegog56/Practica2Arqui2/issues"
+  },
+  "homepage": "https://github.com/diegog56/Practica2Arqui2#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
