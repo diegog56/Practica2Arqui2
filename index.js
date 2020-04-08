@@ -30,6 +30,13 @@ app.get('/', function (req, res) {
     res.send('Welcome to Practica2 Arqui2');
 });
 
+app.get('/prueba', function (req, res) {
+  /*require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+      res.send('Server running at ' + add + ':' + port);
+  })*/
+  res.send({message:'Mensaje de prueba JSON'});
+});
+
 socket.on('connection', function (ws, req) {
     ws.on('message', function (message) {
       var json = 0;
