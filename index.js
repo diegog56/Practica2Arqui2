@@ -23,6 +23,12 @@ app.listen(port, function () {
     console.log('Server running at http://localhost:' + port);
 });
 
+/*
+Ejercicio 1:Ejercicio para triceps
+Ejercicio 2:Curl concentrado
+Ejercicio 3:Elevación lateral
+*/
+
 app.get('/', function (req, res) {
     /*require('dns').lookup(require('os').hostname(), function (err, add, fam) {
         res.send('Server running at ' + add + ':' + port);
@@ -30,16 +36,36 @@ app.get('/', function (req, res) {
     res.send('Welcome to Practica2 Arqui2');
 });
 
-app.get('/prueba', function (req, res) {
-  /*require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-      res.send('Server running at ' + add + ':' + port);
-  })*/
-  res.send({message:'Mensaje de prueba JSON'});
+/*Nueva rutina
+INSERT INTO RUTINA VALUE();
+result = {
+  fieldCount, affectedRows, insertId, serverStatus, warningCount, message, protocol141:boolean, changedRows
+}
+*/
+
+app.post('/routine', function (req, res) {
+  let body = req.body;
+  let id_rutina = 0;
+
+  conn.query('INSERT INTO RUTINA VALUE()', function (err, result) {
+      if (err) throw err;
+      id_rutina=result.insertId;
+      //for() insertar detalle_rutina (id_rutina,id_ejercicio,series,repeticiones)
+  });
+});
+
+app.post('/rep', function (req, res) {
+  let body = req.body;
+
+  conn.query('INSERT INTO resultado_rutina(id_detalle_rutina,serie,numero_repeticion,completado) VALUES(?,?,?,?)', [body.id_detalle_rutina, body.serie, body.numero_repeticion, body.completado], function (err, result) {
+      if (err) throw err;
+      res.send(result);
+  });
 });
 
 socket.on('connection', function (ws, req) {
     ws.on('message', function (message) {
-      var json = 0;
+      var json = 0; 
       try{
       json = JSON.parse(message);
       }
