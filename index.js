@@ -46,11 +46,15 @@ result = {
 app.post('/routine', function (req, res) {
   let body = req.body;
   let id_rutina = 0;
-
-  conn.query('INSERT INTO RUTINA VALUE()', function (err, result) {
+  conn.query('INSERT INTO RUTINA() VALUE()', function (err, result) {
       if (err) throw err;
       id_rutina=result.insertId;
-      //for() insertar detalle_rutina (id_rutina,id_ejercicio,series,repeticiones)
+      for(exercise in body.list){
+        conn.query('INSERT INTO DETALLE_RUTINA(id_rutina,id_ejercicio,series,repeticiones) VALUE(?,?,?,?)',[id_rutina,exercise.exercise,exercise.series,exercise.reps], function (err, result) {
+          if (err) throw err;
+        });
+      }
+      res.send({insertId:id_rutina});
   });
 });
 
@@ -75,21 +79,6 @@ socket.on('connection', function (ws, req) {
       if(json === 0){
         var data = message.split('#');
         console.log(data);
-        report = new Report({
-          location: {
-            latitude: Number.parseFloat(data[0]),
-            longitude: Number.parseFloat(data[1]),
-            height: Number.parseFloat(data[2])
-          }
-        });
-        report.date = new Date(Date.now() - 6*60*60*1000);
-        console.log(report);
-        report.save((err,rep)=>{
-          if (err) {
-            throw err;
-          }
-          console.log('Reporte guardado');
-        });
         message = '{"alarma" : true}';
       }
       else{
