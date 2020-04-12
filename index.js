@@ -3,15 +3,11 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const http = require('http');
+const WebSocket = require('ws');
 const app = express();
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
 var cors = require('cors');
 app.use(cors());
-
-const server = http.createServer(app);
-
-const WebSocket = require('ws');
-const socket = new WebSocket.Server({server});
 
 const db_credentials = require('./db_credentials');
 var conn = mysql.createPool(db_credentials);
@@ -19,9 +15,12 @@ var conn = mysql.createPool(db_credentials);
 
 /*APP*/
 var port = process.env.PORT || 3000;
-app.listen(port, function () {
+
+const server = app.listen(port, function () {
     console.log('Server running at http://localhost:' + port);
 });
+
+const socket = new WebSocket.Server({server});
 
 /*
 Ejercicio 1:Ejercicio para triceps
@@ -104,6 +103,16 @@ app.get('/rep', function (req, res) {
   });
 });
 
+app.post('/socketstest', function (req, res) {
+  let body = req.body;
+  socket.clients.forEach(function (client) {
+    if (client.readyState) {
+      client.send(JSON.stringify(body));
+    }
+  });
+  res.send("Exito");
+});
+
 app.get('/rep/:id', function (req, res) {
   conn.query(`select e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso
   from detalle_rutina dr
@@ -118,27 +127,9 @@ app.get('/rep/:id', function (req, res) {
 
 socket.on('connection', function (ws, req) {
     ws.on('message', function (message) {
-      var json = 0; 
-      try{
-      json = JSON.parse(message);
-      }
-      catch(e){
-          json = 0;
-      }
-      if(json === 0){
-        var data = message.split('#');
-        console.log(data);
-        message = '{"alarma" : true}';
-      }
-      else{
-        if(json.Data)
-          message = 'A';
-        else
-          message = 'B';
-      }
       socket.clients.forEach(function (client) {
-        if (client != ws && client.readyState) {
-          client.send(message);
+        if (client.readyState) {
+          client.send(JSON.stringify(message));
         }
       });
     });
@@ -146,4 +137,4 @@ socket.on('connection', function (ws, req) {
       console.log("lost one client");
     });
     console.log("new client connected");
-  });
+});
