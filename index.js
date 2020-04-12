@@ -128,7 +128,7 @@ app.get('/rep/:id', function (req, res) {
 socket.on('connection', function (ws, req) {
     ws.on('message', function (message) {
       socket.clients.forEach(function (client) {
-        if (client.readyState) {
+        if (ws!=client && client.readyState) {
           client.send(JSON.stringify(message));
         }
       });
