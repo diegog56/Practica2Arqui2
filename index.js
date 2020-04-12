@@ -41,20 +41,25 @@ INSERT INTO RUTINA VALUE();
 result = {
   fieldCount, affectedRows, insertId, serverStatus, warningCount, message, protocol141:boolean, changedRows
 }
+
+INSERT ID /10 TRUNCATE
+*10 +1
 */
 
 app.post('/routine', function (req, res) {
   let body = req.body;
+  let list=[];
+  list=body.list;
   let id_rutina = 0;
   conn.query('INSERT INTO RUTINA() VALUE()', function (err, result) {
       if (err) throw err;
       id_rutina=result.insertId;
-      for(exercise in body.list){
+      for(let exercise of list){
         conn.query('INSERT INTO DETALLE_RUTINA(id_rutina,id_ejercicio,series,repeticiones) VALUE(?,?,?,?)',[id_rutina,exercise.exercise,exercise.series,exercise.reps], function (err, result) {
           if (err) throw err;
         });
       }
-      res.send({insertId:id_rutina});
+      res.send({insertId:Math.trunc(id_rutina/10)});
   });
 });
 
