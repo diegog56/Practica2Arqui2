@@ -50,7 +50,7 @@ app.post('/routine', function (req, res) {
   let list=[];
   list=body.list;
   let id_rutina = 0;
-  conn.query('INSERT INTO RUTINA() VALUE()', function (err, result) {
+  conn.query("INSERT INTO RUTINA(fecha) VALUE(STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'))",[body.date], function (err, result) {
       if (err) throw err;
       id_rutina=result.insertId;
       for(let exercise of list){
@@ -88,7 +88,7 @@ app.get('/routine/:id', function (req, res) {
 app.post('/rep', function (req, res) {
   let body = req.body;
 
-  conn.query('INSERT INTO resultado_rutina(id_rutina,serie,numero_repeticion,completado) VALUES(?,?,?,?)', [body.id_detalle_rutina, body.serie, body.numero_repeticion, body.completado], function (err, result) {
+  conn.query('INSERT INTO resultado_rutina(id_rutina,serie,numero_repeticion,completado) VALUES(?,?,?,?)', [body.id_rutina, body.serie, body.numero_repeticion, body.completado], function (err, result) {
       if (err) throw err;
       res.send(result);
   });
@@ -103,6 +103,11 @@ app.get('/rep', function (req, res) {
       if (err) throw err;
       res.send(result);
   });
+});
+
+app.get('/test', function (req, res) {
+  console.log(new Date());
+  res.send("Exito");
 });
 
 app.get('/rep/:id', function (req, res) {
