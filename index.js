@@ -87,8 +87,8 @@ app.get('/routine/:id', function (req, res) {
 
 app.post('/rep', function (req, res) {
   let body = req.body;
-
-  conn.query('INSERT INTO resultado_rutina(id_rutina,serie,numero_repeticion,completado) VALUES(?,?,?,?)', [body.id_rutina*10+1, body.serie, body.numero_repeticion, body.completado], function (err, result) {
+  
+  conn.query('INSERT INTO resultado_rutina(id_rutina,id_ejercicio,serie,numero_repeticion,completado,BPM,peso) VALUES(?,?,?,?,?,?,?)', [body.id_rutina*10+1,body.id_ejercicio, body.serie, body.numero_repeticion, body.completado, body.BPM, body.peso], function (err, result) {
       if (err) throw err;
       res.send(result);
   });
