@@ -63,7 +63,7 @@ app.post('/routine', function (req, res) {
 });
 
 app.get('/routine', function (req, res) {
-  conn.query(`select TRUNCATE(r.id_rutina/10,0) as id_rutina, e.id_ejercicio, nombre, descripcion, series, repeticiones
+  conn.query(`select TRUNCATE(r.id_rutina/10,0) as id_rutina, r.fecha, e.id_ejercicio, nombre, descripcion, series, repeticiones
   from detalle_rutina dr
   inner join rutina r on r.id_rutina=dr.id_rutina
   inner join ejercicio e on dr.id_ejercicio=e.id_ejercicio
@@ -74,7 +74,7 @@ app.get('/routine', function (req, res) {
 });
 
 app.get('/routine/:id', function (req, res) {
-  conn.query(`select TRUNCATE(r.id_rutina/10,0) as id_rutina, e.id_ejercicio, nombre, descripcion, series, repeticiones
+  conn.query(`select TRUNCATE(r.id_rutina/10,0) as id_rutina, r.fecha, e.id_ejercicio, nombre, descripcion, series, repeticiones
   from detalle_rutina dr
   inner join rutina r on r.id_rutina=dr.id_rutina
   inner join ejercicio e on dr.id_ejercicio=e.id_ejercicio
