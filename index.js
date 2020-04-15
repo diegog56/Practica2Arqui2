@@ -8,15 +8,15 @@ const app = express();
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
 var cors = require('cors');
 app.use(cors());
-
+const server = http.createServer(app);
 const db_credentials = require('./db_credentials');
 var conn = mysql.createPool(db_credentials);
 
 
 /*APP*/
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 3000;
 
-const server = app.listen(port, function () {
+app.listen(port, function () {
     console.log('Server running at http://localhost:' + port);
 });
 
