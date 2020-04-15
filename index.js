@@ -14,7 +14,7 @@ var conn = mysql.createPool(db_credentials);
 
 
 /*APP*/
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 80;
 
 const server = app.listen(port, function () {
     console.log('Server running at http://localhost:' + port);
