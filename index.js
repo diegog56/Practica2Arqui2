@@ -88,14 +88,14 @@ app.get('/routine/:id', function (req, res) {
 app.post('/rep', function (req, res) {
   let body = req.body;
   
-  conn.query('INSERT INTO resultado_rutina(id_rutina,id_ejercicio,serie,numero_repeticion,completado,BPM,peso) VALUES(?,?,?,?,?,?,?)', [body.id_rutina*10+1,body.id_ejercicio, body.serie, body.numero_repeticion, body.completado, body.BPM, body.peso], function (err, result) {
+  conn.query("INSERT INTO resultado_rutina(id_rutina,id_ejercicio,serie,numero_repeticion,completado,BPM,peso,fecha) VALUES(?,?,?,?,?,?,?,STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'))", [body.id_rutina*10+1,body.id_ejercicio, body.serie, body.numero_repeticion, body.completado, body.BPM, body.peso, body.fecha], function (err, result) {
       if (err) throw err;
       res.send(result);
   });
 });
 
 app.get('/rep', function (req, res) {
-  conn.query(`select rr.id_rutina, e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso
+  conn.query(`select rr.id_rutina, e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso,rr.fecha
   from resultado_rutina rr
   inner join ejercicio e
     on rr.id_ejercicio=e.id_ejercicio
@@ -111,7 +111,7 @@ app.get('/test', function (req, res) {
 });
 
 app.get('/rep/:id', function (req, res) {
-  conn.query(`select rr.id_rutina, e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso
+  conn.query(`select rr.id_rutina, e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso,rr.fecha
   from resultado_rutina rr
   inner join ejercicio e
     on rr.id_ejercicio=e.id_ejercicio
