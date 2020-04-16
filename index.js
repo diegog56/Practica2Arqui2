@@ -125,7 +125,7 @@ socket.on('connection', function (ws, req) {
     ws.on('message', function (message) {
       socket.clients.forEach(function (client) {
         if (ws!=client && client.readyState) {
-          client.send(JSON.stringify(message));
+          client.send(message);
         }
       });
     });
