@@ -104,9 +104,30 @@ app.get('/rep', function (req, res) {
   });
 });
 
-app.get('/test', function (req, res) {
-  console.log(new Date());
-  res.send("Exito");
+app.get('/incpause', function (req, res) {
+  let cont=0;
+  conn.query('select * from pausa', function (err, result) {
+    if (err) throw err;
+    cont=result[0].contador;
+    conn.query('update pausa set contador=?+1 where contador>=0',[cont], function (err, result) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+});
+
+app.get('/pause', function (req, res) {
+  conn.query('select * from pausa', function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+app.get('/resetpause', function (req, res) {
+  conn.query('update pausa set contador=0 where contador>=0', function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
 });
 
 app.get('/rep/:id', function (req, res) {
