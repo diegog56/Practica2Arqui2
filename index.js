@@ -104,27 +104,11 @@ app.get('/rep', function (req, res) {
   });
 });
 
-app.get('/incpause', function (req, res) {
-  let cont=0;
-  conn.query('select * from pausa', function (err, result) {
-    if (err) throw err;
-    cont=result[0].contador;
-    conn.query('update pausa set contador=?+1 where contador>=0',[cont], function (err, result) {
-      if (err) throw err;
-      res.send(result);
-    });
-  });
-});
 
 app.get('/pause', function (req, res) {
-  conn.query('select * from pausa', function (err, result) {
-    if (err) throw err;
-    res.send(result);
-  });
-});
-
-app.get('/resetpause', function (req, res) {
-  conn.query('update pausa set contador=0 where contador>=0', function (err, result) {
+  conn.query(`select TRUNCATE(id_rutina/10,0) as id_rutina, fecha, TRUNCATE(COUNT(*)/2,0) as pausas from resultado_rutina
+  where completado=0
+  group by TRUNCATE(id_rutina/10,0), fecha`, function (err, result) {
     if (err) throw err;
     res.send(result);
   });
