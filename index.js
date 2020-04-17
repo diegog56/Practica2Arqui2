@@ -94,7 +94,7 @@ app.post('/rep', function (req, res) {
 });
 
 app.get('/rep', function (req, res) {
-  conn.query(`select rr.id_rutina, e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso,rr.fecha
+  conn.query(`select TRUNCATE(rr.id_rutina/10,0), e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso,rr.fecha
   from resultado_rutina rr
   inner join ejercicio e
     on rr.id_ejercicio=e.id_ejercicio
@@ -106,7 +106,7 @@ app.get('/rep', function (req, res) {
 
 
 app.get('/pause', function (req, res) {
-  conn.query(`select TRUNCATE(id_rutina/10,0) as id_rutina, fecha, TRUNCATE(COUNT(*)/2,0) as pausas from resultado_rutina
+  conn.query(`select TRUNCATE(rr.id_rutina/10,0) as id_rutina, fecha, TRUNCATE(COUNT(*)/2,0) as pausas from resultado_rutina
   where completado=0
   group by TRUNCATE(id_rutina/10,0), fecha`, function (err, result) {
     if (err) throw err;
@@ -115,7 +115,7 @@ app.get('/pause', function (req, res) {
 });
 
 app.get('/rep/:id', function (req, res) {
-  conn.query(`select rr.id_rutina, e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso,rr.fecha
+  conn.query(`select TRUNCATE(rr.id_rutina/10,0), e.nombre, e.descripcion, rr.serie, rr.numero_repeticion, rr.completado, rr.BPM, rr.peso,rr.fecha
   from resultado_rutina rr
   inner join ejercicio e
     on rr.id_ejercicio=e.id_ejercicio
